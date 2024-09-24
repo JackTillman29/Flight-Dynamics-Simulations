@@ -1,0 +1,11 @@
+wgs84_lat, LAT84
+wgs84_lon, LON84
+wgs84_alt, GEOHT84
+yaw, YAW
+pitch, PITCH
+roll, ROLL
+time, TSEC
+run, RUN
+units_yaw, deg
+units_pitch, deg
+units_roll, deg

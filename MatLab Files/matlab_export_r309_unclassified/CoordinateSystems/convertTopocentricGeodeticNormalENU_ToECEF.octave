@@ -1,0 +1,87 @@
+%Syntax: convertTopocentricGeodeticNormalENU_ToECEF([local_origin_ecef_x(1x1) local_origin_ecef_y(1x1) local_origin_ecef_z(1x1)],
+%                                                   [geodeticLatRad(1x1)      geodeticLonRad(1x1)],                                ...;
+%                                                   [east_m(nx1)            north_m(nx1)            up_m)(nx1)];
+
+
+DEFUN_DLD ( convertTopocentricGeodeticNormalENU_ToECEF, args, nargout,"convertTopocentricGeodeticNormalENU_ToECEF" )
+{
+    // determine the number of input arguments
+    int nargin = args.length ();
+
+    // User must pass in lat,lon,alt
+    if ( nargin != 3 )
+    {
+        octave_stdout << "Syntax: convertTopocentricGeodeticNormalENU_ToECEF([local_origin_ecef_x(1x1) local_origin_ecef_y(1x1) local_origin_ecef_z(1x1)], ...\n";
+        octave_stdout << "                                                    [geodeticLatRad(1x1)      geodeticLonRad(1x1)],                                ...\n";
+        octave_stdout << "                                                    [east_m(nx1)            north_m(nx1)            up_m)(nx1)];";
+        return octave_value_list();
+    }
+    else
+    {
+        // check that all are the same size
+    }
+
+    //Check the first matrix
+    Matrix inputData_local_origin_ecef = args ( 0 ).matrix_value();
+    //Check that the matrix is 1x3 dimensions
+    if ( inputData_local_origin_ecef.cols() != 3 || inputData_local_origin_ecef.rows() != 1)
+    {
+        octave_stdout << "Syntax: convertTopocentricGeodeticNormalENU_ToECEF([local_origin_ecef_x(1x1) local_origin_ecef_y(1x1) local_origin_ecef_z(1x1)], ...\n";
+        octave_stdout << "                                                    [geodeticLatRad(1x1)      geodeticLonRad(1x1)],                                ...\n";
+        octave_stdout << "                                                    [east_m(nx1)            north_m(nx1)            up_m)(nx1)];";
+        octave_stdout << "        local_origin_ecef must be dim: 1x3\n";
+        return octave_value_list();
+    }
+
+
+    //Check the second matrix
+    Matrix inputData_geodeticLatLonRad = args ( 1 ).matrix_value();
+    //Check that the matrix is 1x3 dimensions
+    if ( inputData_geodeticLatLonRad.cols() != 2 || inputData_geodeticLatLonRad.rows() != 1)
+    {
+        octave_stdout << "Syntax: convertTopocentricGeodeticNormalENU_ToECEF([local_origin_ecef_x(1x1) local_origin_ecef_y(1x1) local_origin_ecef_z(1x1)], ...\n";
+        octave_stdout << "                                                    [geodeticLatRad(1x1)      geodeticLonRad(1x1)],                                ...\n";
+        octave_stdout << "                                                    [east_m(nx1)            north_m(nx1)            up_m)(nx1)];";
+        octave_stdout << "        geodeticLatLonRad must be dim: 1x2\n";
+        return octave_value_list();
+    }
+    
+    //Check the third matrix determine number of rows of data to process
+    Matrix inputData_enu_m = args ( 2 ).matrix_value();
+    unsigned int nRows ( inputData_enu_m.rows() );
+    unsigned int nCols ( inputData_enu_m.cols() );
+    //Check that the matrix is nx3 dimensions
+    if ( nCols != 3 )
+    {
+        octave_stdout << "Syntax: convertTopocentricGeodeticNormalENU_ToECEF([local_origin_ecef_x(1x1) local_origin_ecef_y(1x1) local_origin_ecef_z(1x1)], ...\n";
+        octave_stdout << "                                                    [geodeticLatRad(1x1)      geodeticLonRad(1x1)],                                ...\n";
+        octave_stdout << "                                                    [east_m(nx1)            north_m(nx1)            up_m)(nx1)];";
+        octave_stdout << "        ENU_m must be dim: Nx3\n";
+        return octave_value_list();
+    }
+
+    dim_vector outputDimensions ( 2 );
+    outputDimensions ( 0 ) = nRows;
+    outputDimensions ( 1 ) = nCols;
+    Matrix outputData ( outputDimensions );
+
+
+    for ( unsigned int k = 0; k < nRows; ++k )
+    {
+        vm::convertTopocentricGeodeticNormalENU_ToECEF (
+            inputData_local_origin_ecef ( 0,0 ),
+            inputData_local_origin_ecef ( 0,1 ),
+            inputData_local_origin_ecef ( 0,2 ),
+            inputData_geodeticLatLonRad ( 0,0 ),
+            inputData_geodeticLatLonRad ( 0,1 ),
+            inputData_enu_m ( k,0 ),
+            inputData_enu_m ( k,1 ),
+            inputData_enu_m ( k,2 ),
+            outputData ( k,0 ),
+            outputData ( k,1 ),
+            outputData ( k,2 )
+        );
+    }
+
+    return octave_value ( outputData );
+}

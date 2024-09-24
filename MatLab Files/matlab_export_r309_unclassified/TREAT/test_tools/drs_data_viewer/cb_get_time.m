@@ -1,0 +1,9 @@
+p = ginput(2);
+refTime = evalin('base','timeWindow(1);');
+fprintf( ...
+    'Time Slice: %f,%f\n', ...
+    refTime + p(1,1)*1e-6, ...
+    refTime + p(2,1)*1e-6);
+assignin('base','timeArray',refTime + [p(1,1)*1e-6 p(2,1)*1e-6]);
+close all;
+evalin('base','drs_quicklook;');

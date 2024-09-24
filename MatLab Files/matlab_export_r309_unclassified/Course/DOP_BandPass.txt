@@ -1,0 +1,29 @@
+2'nd Order Sections
+
+Sect 0
+a0   1.000000000000000000
+a1   -0.999987433708341977
+a2   0.000000000000000000
+b0   0.000006283145829093
+b1   0.000006283145829093
+b2   0.000000000000000000
+
+
+Nth Order Coefficients
+Numerator
+b1  6.283145829092711130E-6
+b0  6.283145829092711130E-6
+
+Denominator
+a1  -9.999874337083419110E-1
+a0  1.000000000000000000E0
+ 
+1  Z Plane Zeros  
+-1.00000000    
+ 
+1  Z Plane Poles  
+0.99998743
+
+Some DSP cores use -a values.
+See Implementing IIR Filters
+in the Help file.
